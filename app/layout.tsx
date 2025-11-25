@@ -1,44 +1,28 @@
-// app/layout.tsx
-import "./globals.css";
+import { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import Layouts from "@/common/components/layouts";
-import ThemeProviderContext from "@/common/stores/theme";
-import { onestSans } from "@/common/styles/fonts";
-import { METADATA } from "@/common/constants/metadata";
-
-export const metadata = {
-  metadataBase: new URL(
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://radeennndsp.netlify.app"
-  ),
-  description: METADATA.description,
-  keywords: METADATA.keyword,
-  creator: METADATA.creator,
-  authors: [{ name: METADATA.creator }],
-  openGraph: {
-    images: METADATA.profile,
-    url: "https://radeennndsp.netlify.app",
-    siteName: METADATA.openGraph.siteName,
-    locale: METADATA.openGraph.locale,
-    type: "website",
-  },
-};
+import Container from "@/common/components/elements/Container";
 
 interface RootLayoutProps {
-  children: React.ReactNode;
-  params: { locale: string };
+  children: ReactNode;
+  params: {
+    locale: string;
+  };
 }
 
-export default function RootLayout({ children, params }: RootLayoutProps) {
+// Fungsi getMessages harus dikasih object { locale }
+async function getMessages(locale: string) {
+  const messages = await import(`@/locales/${locale}.json`);
+  return messages.default;
+}
+
+export default async function RootLayout({ children, params }: RootLayoutProps) {
+  const messages = await getMessages(params.locale);
+
   return (
     <html lang={params.locale}>
-      <body className={onestSans.className}>
-        {/* Kosongkan messages di RootLayout, fetch async pindah ke page */}
-        <NextIntlClientProvider locale={params.locale} messages={{}}>
-          <ThemeProviderContext>
-            <Layouts>{children}</Layouts>
-          </ThemeProviderContext>
+      <body>
+        <NextIntlClientProvider locale={params.locale} messages={messages}>
+          <Container>{children}</Container>
         </NextIntlClientProvider>
       </body>
     </html>
