@@ -35,14 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-interface RootLayoutProps {
-  children: React.ReactNode;
-  params: { locale: string };
-}
-
-export default async function RootLayout({ children, params }: RootLayoutProps) {
-  const { locale } = params;
-  const messages = await getMessages({ locale }); // ✅ HARUS dalam object
+// Tip: jangan pakai LayoutProps, biar build Netlify aman
+export default async function RootLayout({ children, params }: any) {
+  const locale = params?.locale || "en";
+  const messages = await getMessages({ locale });
   const session = await getServerSession();
 
   return (
