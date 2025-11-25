@@ -13,7 +13,6 @@ import NextAuthProvider from "@/SessionProvider";
 import { METADATA } from "@/common/constants/metadata";
 import { onestSans } from "@/common/styles/fonts";
 
-// Metadata tetap sama
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
@@ -36,14 +35,14 @@ export const metadata: Metadata = {
   },
 };
 
-// Type manual untuk RootLayout props
+// ✅ Non-async params, compatible LayoutProps
 type RootLayoutProps = {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>; // ⚠ params di Netlify bisa Promise
+  params: { locale: string };
 };
 
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
-  const { locale } = await params;
+  const { locale } = params; // langsung pakai params
 
   const messages = await getMessages();
   const session = await getServerSession();
