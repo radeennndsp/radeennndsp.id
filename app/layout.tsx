@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.DOMAIN || "",
+      : process.env.DOMAIN || ""
   ),
   description: METADATA.description,
   keywords: METADATA.keyword,
@@ -37,24 +37,20 @@ export const metadata: Metadata = {
 
 const RootLayout = async ({
   children,
-  params: { locale },
-}: Readonly<{
+}: {
   children: React.ReactNode;
-  params: { locale: string };
-}>) => {
+}) => {
   const messages = await getMessages();
   const session = await getServerSession();
 
   return (
-    <html lang={locale} suppressHydrationWarning={true}>
+    <html suppressHydrationWarning={true}>
       <Script
         defer
         src="https://cloud.umami.is/script.js"
         data-website-id="91c868c5-2a89-4a1d-b292-56c40ea30137"
-
-        // data-domains="satriabahari.site"
-        // data-website-id="8e2c9f27-a12b-48ca-8130-808ebe377aca"
       ></Script>
+
       <body className={onestSans.className}>
         <NextTopLoader
           color="#4ade80"
@@ -67,6 +63,7 @@ const RootLayout = async ({
           speed={200}
           shadow="0 0 10px #4ade80,0 0 5px #86efac"
         />
+
         <NextIntlClientProvider messages={messages}>
           <NextAuthProvider session={session}>
             <ThemeProviderContext>
@@ -74,6 +71,7 @@ const RootLayout = async ({
             </ThemeProviderContext>
           </NextAuthProvider>
         </NextIntlClientProvider>
+
         <Analytics />
       </body>
     </html>
