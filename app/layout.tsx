@@ -37,11 +37,12 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params?: { locale?: string };
 }
 
-const RootLayout = async ({ children, params }: RootLayoutProps) => {
-  const locale = params?.locale || "id"; // fallback agar aman
+const RootLayout = async ({ children }: RootLayoutProps) => {
+  // Root layout TIDAK boleh punya params, jadi locale harus default
+  const locale = "id";
+
   const messages = await getMessages({ locale });
   const session = await getServerSession();
 
