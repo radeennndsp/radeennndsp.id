@@ -1,25 +1,19 @@
 // app/layout.tsx
-import { NextIntlClientProvider } from "next-intl";
 import "./globals.css";
+import { NextIntlClientProvider } from "next-intl/server";
+import { getMessages } from "next-intl/server";
 
 import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
 import { onestSans } from "@/common/styles/fonts";
 
-// Statik import semua pesan
-import en from "@/messages/en.json";
-import id from "@/messages/id.json";
-
-const messagesMap = { en, id };
-
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { locale: "en" | "id" };
+  params: { locale: string };
 }
 
-const RootLayout = ({ children, params }: RootLayoutProps) => {
-  // Ambil messages berdasarkan locale, fallback ke English
-  const messages = messagesMap[params.locale] || messagesMap.en;
+const RootLayout = async ({ children, params }: RootLayoutProps) => {
+  const messages = await getMessages({ locale: params.locale });
 
   return (
     <html lang={params.locale} suppressHydrationWarning>
