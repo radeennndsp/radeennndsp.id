@@ -13,12 +13,13 @@ import NextAuthProvider from "@/SessionProvider";
 import { METADATA } from "@/common/constants/metadata";
 import { onestSans } from "@/common/styles/fonts";
 
+const appUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : process.env.DOMAIN || ""
-  ),
+  metadataBase: new URL(appUrl),
   description: METADATA.description,
   keywords: METADATA.keyword,
   creator: METADATA.creator,
@@ -35,11 +36,7 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = async ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const messages = await getMessages();
   const session = await getServerSession();
 

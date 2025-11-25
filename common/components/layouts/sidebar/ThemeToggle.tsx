@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import {
   BsCloudMoon as DarkModeIcon,
   BsCloudSun as LightModeIcon,
@@ -9,6 +10,14 @@ import {
 
 const ThemeToggle = () => {
   const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Cegah SSR render → hilangkan hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const isLightMode = resolvedTheme === "light";
 
@@ -73,11 +82,7 @@ const ThemeToggle = () => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300 text-neutral-900 dark:bg-neutral-700 dark:text-neutral-50"
         >
-          {isLightMode ? (
-            <DarkModeIcon size={17} />
-          ) : (
-            <LightModeIcon size={17} />
-          )}
+          {isLightMode ? <DarkModeIcon size={17} /> : <LightModeIcon size={17} />}
         </motion.div>
       </button>
     </div>
