@@ -1,11 +1,12 @@
-import "./globals.css";
-import Script from "next/script";
+// app/layout.tsx
 import NextTopLoader from "nextjs-toploader";
+import Script from "next/script";
 import { getServerSession } from "next-auth";
 import { Analytics } from "@vercel/analytics/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import type { Metadata } from "next";
+import "./globals.css";
 
 import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
@@ -17,32 +18,35 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.DOMAIN || ""
+      : "https://radeennndsp.netlify.app"
   ),
   description: METADATA.description,
   keywords: METADATA.keyword,
   creator: METADATA.creator,
   authors: {
     name: METADATA.creator,
-    url: METADATA.openGraph.url,
+    url: "https://radeennndsp.netlify.app",
   },
   openGraph: {
     images: METADATA.profile,
-    url: METADATA.openGraph.url,
+    url: "https://radeennndsp.netlify.app",
     siteName: METADATA.openGraph.siteName,
     locale: METADATA.openGraph.locale,
     type: "website",
   },
 };
 
-// Tip: jangan pakai LayoutProps, biar build Netlify aman
-export default async function RootLayout({ children, params }: any) {
-  const locale = params?.locale || "en";
-  const messages = await getMessages({ locale });
+interface RootLayoutProps {
+  children: React.ReactNode;
+  params: { locale: string };
+}
+
+const RootLayout = async ({ children, params }: RootLayoutProps) => {
+  const messages = await getMessages({ locale: params.locale }); 
   const session = await getServerSession();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={params.locale} suppressHydrationWarning={true}>
       <Script
         defer
         src="https://cloud.umami.is/script.js"
@@ -60,7 +64,7 @@ export default async function RootLayout({ children, params }: any) {
           speed={200}
           shadow="0 0 10px #4ade80,0 0 5px #86efac"
         />
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={params.locale} messages={messages}>
           <NextAuthProvider session={session}>
             <ThemeProviderContext>
               <Layouts>{children}</Layouts>
@@ -71,4 +75,6 @@ export default async function RootLayout({ children, params }: any) {
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
