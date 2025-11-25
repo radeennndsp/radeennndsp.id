@@ -1,12 +1,11 @@
-// app/layout.tsx
-import NextTopLoader from "nextjs-toploader";
+import "./globals.css";
 import Script from "next/script";
+import NextTopLoader from "nextjs-toploader";
 import { getServerSession } from "next-auth";
 import { Analytics } from "@vercel/analytics/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import type { Metadata, LayoutProps } from "next";
-import "./globals.css";
+import type { Metadata } from "next";
 
 import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
@@ -36,14 +35,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-  params,
-}: LayoutProps<"/">) {
-  // ✅ Awalnya params adalah Promise<{ locale: string }>
-  const { locale } = await params;
+interface RootLayoutProps {
+  children: React.ReactNode;
+  params: { locale: string };
+}
 
-  const messages = await getMessages(locale);
+export default async function RootLayout({ children, params }: RootLayoutProps) {
+  const { locale } = params;
+  const messages = await getMessages({ locale }); // ✅ HARUS dalam object
   const session = await getServerSession();
 
   return (
@@ -59,13 +58,13 @@ export default async function RootLayout({
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
-          crawl
+          crawl={true}
           showSpinner={false}
           easing="ease"
           speed={200}
           shadow="0 0 10px #4ade80,0 0 5px #86efac"
         />
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <NextAuthProvider session={session}>
             <ThemeProviderContext>
               <Layouts>{children}</Layouts>
