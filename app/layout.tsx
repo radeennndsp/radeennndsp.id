@@ -13,11 +13,12 @@ import NextAuthProvider from "@/SessionProvider";
 import { METADATA } from "@/common/constants/metadata";
 import { onestSans } from "@/common/styles/fonts";
 
+// Metadata tetap sama
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.DOMAIN || "",
+      : process.env.DOMAIN || ""
   ),
   description: METADATA.description,
   keywords: METADATA.keyword,
@@ -35,30 +36,32 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = async ({
-  children,
-  params: { locale },
-}: Readonly<{
+// Type manual untuk RootLayout props
+type RootLayoutProps = {
   children: React.ReactNode;
-  params: { locale: string };
-}>) => {
+  params: Promise<{ locale: string }>; // ⚠ params di Netlify bisa Promise
+};
+
+const RootLayout = async ({ children, params }: RootLayoutProps) => {
+  const { locale } = await params;
+
   const messages = await getMessages();
   const session = await getServerSession();
 
   return (
-    <html lang={locale} suppressHydrationWarning={true}>
+    <html lang={locale} suppressHydrationWarning>
       <Script
         defer
         src="https://cloud.umami.is/script.js"
         data-website-id="d3a91e08-d129-4de3-9552-63181813c4b9"
-      ></Script>
+      />
       <body className={onestSans.className}>
         <NextTopLoader
           color="#4ade80"
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
-          crawl={true}
+          crawl
           showSpinner={false}
           easing="ease"
           speed={200}
