@@ -1,6 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
-import { NextIntlClientProvider } from "next-intl/server";
+import Script from "next/script";
+import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 
 import Layouts from "@/common/components/layouts";
@@ -17,6 +18,7 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
 
   return (
     <html lang={params.locale} suppressHydrationWarning>
+      <Script defer src="https://cloud.umami.is/script.js" data-website-id="d3a91e08-d129-4de3-9552-63181813c4b9" />
       <body className={onestSans.className}>
         <NextIntlClientProvider locale={params.locale} messages={messages}>
           <ThemeProviderContext>
