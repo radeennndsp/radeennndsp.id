@@ -30,11 +30,11 @@ interface RootLayoutProps {
   params: { locale: string };
 }
 
-
 export default function RootLayout({ children, params }: RootLayoutProps) {
   return (
     <html lang={params.locale}>
       <body className={onestSans.className}>
+        {/* Kosongkan messages di RootLayout, fetch async pindah ke page */}
         <NextIntlClientProvider locale={params.locale} messages={{}}>
           <ThemeProviderContext>
             <Layouts>{children}</Layouts>
