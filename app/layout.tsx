@@ -6,21 +6,21 @@ import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
 import { onestSans } from "@/common/styles/fonts";
 
+// Import statis, tidak async
 import en from "@/messages/en.json";
 import id from "@/messages/id.json";
 
-// Pastikan key sesuai file
+// map semua locale
 const messagesMap = { en, id };
 type Locale = keyof typeof messagesMap; // 'en' | 'id'
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: { locale: Locale }; // harus cocok type Locale
 }
 
 const RootLayout = ({ children, params }: RootLayoutProps) => {
-  // fallback aman
-  const locale: Locale = params.locale in messagesMap ? params.locale : 'en';
+  const locale: Locale = params.locale in messagesMap ? params.locale : "en";
   const messages = messagesMap[locale];
 
   return (
