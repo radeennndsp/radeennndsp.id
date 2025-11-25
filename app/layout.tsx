@@ -6,26 +6,25 @@ import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
 import { onestSans } from "@/common/styles/fonts";
 
-// Import statis, synchronous
+// Statik import semua pesan
 import en from "@/messages/en.json";
 import id from "@/messages/id.json";
 
 const messagesMap = { en, id };
-type Locale = keyof typeof messagesMap; // 'en' | 'id'
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: { locale: "en" | "id" };
 }
 
 const RootLayout = ({ children, params }: RootLayoutProps) => {
-  const locale: Locale = params.locale in messagesMap ? params.locale : "en";
-  const messages = messagesMap[locale];
+  // Ambil messages berdasarkan locale, fallback ke English
+  const messages = messagesMap[params.locale] || messagesMap.en;
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={params.locale} suppressHydrationWarning>
       <body className={onestSans.className}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={params.locale} messages={messages}>
           <ThemeProviderContext>
             <Layouts>{children}</Layouts>
           </ThemeProviderContext>
