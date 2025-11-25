@@ -17,33 +17,32 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://radeennndsp.netlify.app"
+      : process.env.DOMAIN || "",
   ),
   description: METADATA.description,
   keywords: METADATA.keyword,
   creator: METADATA.creator,
   authors: {
     name: METADATA.creator,
-    url: "https://radeennndsp.netlify.app",
+    url: METADATA.openGraph.url,
   },
   openGraph: {
     images: METADATA.profile,
-    url: "https://radeennndsp.netlify.app",
+    url: METADATA.openGraph.url,
     siteName: METADATA.openGraph.siteName,
     locale: METADATA.openGraph.locale,
     type: "website",
   },
 };
 
-interface RootLayoutProps {
+const RootLayout = async ({
+  children,
+  params: { locale },
+}: Readonly<{
   children: React.ReactNode;
-}
-
-const RootLayout = async ({ children }: RootLayoutProps) => {
-  // Root layout TIDAK boleh punya params, jadi locale harus default
-  const locale = "id";
-
-  const messages = await getMessages({ locale });
+  params: { locale: string };
+}>) => {
+  const messages = await getMessages();
   const session = await getServerSession();
 
   return (
@@ -51,8 +50,11 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
       <Script
         defer
         src="https://cloud.umami.is/script.js"
-        data-website-id="d3a91e08-d129-4de3-9552-63181813c4b9"
-      />
+        data-website-id="91c868c5-2a89-4a1d-b292-56c40ea30137"
+
+        // data-domains="satriabahari.site"
+        // data-website-id="8e2c9f27-a12b-48ca-8130-808ebe377aca"
+      ></Script>
       <body className={onestSans.className}>
         <NextTopLoader
           color="#4ade80"
@@ -65,7 +67,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
           speed={200}
           shadow="0 0 10px #4ade80,0 0 5px #86efac"
         />
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider messages={messages}>
           <NextAuthProvider session={session}>
             <ThemeProviderContext>
               <Layouts>{children}</Layouts>
