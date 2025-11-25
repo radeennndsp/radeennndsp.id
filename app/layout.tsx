@@ -1,24 +1,28 @@
 // app/layout.tsx
-import "./globals.css";
-import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import "./globals.css";
 
 import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
 import { onestSans } from "@/common/styles/fonts";
 
+// import statis JSON, aman di Netlify
+import en from "@/messages/en.json";
+import id from "@/messages/id.json";
+
+const messagesMap = { en, id };
+
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: "en" | "id" };
 }
 
-const RootLayout = async ({ children, params }: RootLayoutProps) => {
-  const messages = await getMessages({ locale: params.locale });
+const RootLayout = ({ children, params }: RootLayoutProps) => {
+  // fallback ke English kalau locale tidak ada
+  const messages = messagesMap[params.locale] || messagesMap.en;
 
   return (
     <html lang={params.locale} suppressHydrationWarning>
-      <Script defer src="https://cloud.umami.is/script.js" data-website-id="d3a91e08-d129-4de3-9552-63181813c4b9" />
       <body className={onestSans.className}>
         <NextIntlClientProvider locale={params.locale} messages={messages}>
           <ThemeProviderContext>
