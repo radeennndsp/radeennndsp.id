@@ -1,10 +1,11 @@
+// app/layout.tsx
 import NextTopLoader from "nextjs-toploader";
 import Script from "next/script";
 import { getServerSession } from "next-auth";
 import { Analytics } from "@vercel/analytics/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import type { Metadata } from "next";
+import type { Metadata, LayoutProps } from "next";
 import "./globals.css";
 
 import Layouts from "@/common/components/layouts";
@@ -35,16 +36,14 @@ export const metadata: Metadata = {
   },
 };
 
-// ✅ Non-async params, compatible LayoutProps
-type RootLayoutProps = {
-  children: React.ReactNode;
-  params: { locale: string };
-};
+export default async function RootLayout({
+  children,
+  params,
+}: LayoutProps<"/">) {
+  // ✅ Awalnya params adalah Promise<{ locale: string }>
+  const { locale } = await params;
 
-const RootLayout = async ({ children, params }: RootLayoutProps) => {
-  const { locale } = params; // langsung pakai params
-
-  const messages = await getMessages();
+  const messages = await getMessages(locale);
   const session = await getServerSession();
 
   return (
@@ -77,6 +76,4 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
       </body>
     </html>
   );
-};
-
-export default RootLayout;
+}
