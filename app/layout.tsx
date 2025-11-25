@@ -1,12 +1,9 @@
-// app/layout.tsx
 import { NextIntlClientProvider } from "next-intl";
 import "./globals.css";
-
 import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
 import { onestSans } from "@/common/styles/fonts";
 
-// import statis JSON, aman di Netlify
 import en from "@/messages/en.json";
 import id from "@/messages/id.json";
 
@@ -18,7 +15,6 @@ interface RootLayoutProps {
 }
 
 const RootLayout = ({ children, params }: RootLayoutProps) => {
-  // fallback ke English kalau locale tidak ada
   const messages = messagesMap[params.locale] || messagesMap.en;
 
   return (
