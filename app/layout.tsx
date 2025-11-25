@@ -13,22 +13,28 @@ import NextAuthProvider from "@/SessionProvider";
 import { METADATA } from "@/common/constants/metadata";
 import { onestSans } from "@/common/styles/fonts";
 
-const appUrl =
+// FIX UTAMA — aman dari error new URL()
+const domain =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : `https://${process.env.VERCEL_URL}`;
+    : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "https://radeennndsp.vercel.app/";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(appUrl),
+  metadataBase: new URL(domain),
+
   description: METADATA.description,
   keywords: METADATA.keyword,
   creator: METADATA.creator,
+
   authors: [
     {
       name: METADATA.creator,
       url: METADATA.openGraph.url,
     },
   ],
+
   openGraph: {
     images: METADATA.profile,
     url: METADATA.openGraph.url,
@@ -48,7 +54,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         defer
         src="https://cloud.umami.is/script.js"
         data-website-id="91c868c5-2a89-4a1d-b292-56c40ea30137"
-      ></Script>
+      />
 
       <body className={onestSans.className}>
         <NextTopLoader
