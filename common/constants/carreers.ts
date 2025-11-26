@@ -83,7 +83,7 @@ export const CAREERS: CareerProps[] = [
   {
   position: "Member of Communication & Information Division",
   company: "Himpunan Mahasiswa Informatika (HIMAFORTIC)",
-  logo: "/images/careers/HIMAFORTIC UNUGHA.PNG",
+  logo: "/images/careers/himafortic.png",
   location: "Cilacap, Indonesia 🇮🇩",
   location_type: "Onsite",
   type: "Organization",

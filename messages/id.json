@@ -35,7 +35,7 @@
   },
   "AchievementsPage": {
     "title": "Pencapaian",
-    "description": "Kumpulan sertifikat dan badge yang saya peroleh sepanjang perjalanan profesional dan akademik.",
+    "description": "Kumpulan sertifikat yang saya peroleh sepanjang perjalanan profesional dan akademik.",
     "error": "Terjadi kesalahan pada server.",
     "no_data": "Data tidak tersedia.",
     "show_credential": "Lihat Kredensial"
